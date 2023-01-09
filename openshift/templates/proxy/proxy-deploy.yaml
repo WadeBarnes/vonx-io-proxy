@@ -176,6 +176,7 @@ objects:
         app-group: ${APP_GROUP}
         role: ${ROLE}
         env: ${TAG_NAME}
+        certbot-managed: ${CERTBOT_MANAGED_ROUTE}
       annotations:
         haproxy.router.openshift.io/timeout: ${ROUTE_TIMEOUT}
     spec:
@@ -201,6 +202,7 @@ objects:
         app-group: ${APP_GROUP}
         role: ${ROLE}
         env: ${TAG_NAME}
+        certbot-managed: ${CERTBOT_MANAGED_ROUTE}
       annotations:
         haproxy.router.openshift.io/timeout: ${ROUTE_TIMEOUT}
     spec:
@@ -316,7 +318,7 @@ parameters:
   - name: APPLICATION_DOMAIN
     displayName: Application Hostname
     description: The exposed hostname that will route to the service, e.g., myappname.apps.silver.devops.gov.bc.ca, if left blank a value will be defaulted.
-    value: test.vonx.io
+    value: dev.vonx.io
   - name: ROUTE_TIMEOUT
     displayName: Route Timeout
     description: The timeout for the application route.  When this timeout is exceeded the application's route will respond with a 504 Gateway Timeout error.
@@ -330,11 +332,17 @@ parameters:
   - name: ALT_HOST_NAME
     displayName: Alternate Host Name
     description: The alternate host name to redirect.
-    value: iiw-test.vonx.io
+    value: iiw-dev.vonx.io
   - name: ALT_HOST_REDIRECT_URL
     displayName: Alternate Host Redirect URL
     description: The redirect URL for the alternate host name.
     value: https://digital.gov.bc.ca/digital-trust/projects-and-initiatives/conference-book-demo
+
+  - name: CERTBOT_MANAGED_ROUTE
+    displayName: Certbot Managed Route
+    description: Flag indicating whether the routes certificates are managed by CertBot.
+    required: true
+    value: 'false'
 
   - description: The TAG name for this environment, e.g., dev, test, prod
     displayName: Env TAG name

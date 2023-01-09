@@ -20,6 +20,7 @@ APPLICATION_DOMAIN=dev.vonx.io
 REDIRECT_URL=https://digital.gov.bc.ca/digital-trust
 ALT_HOST_NAME=iiw-dev.vonx.io
 ALT_HOST_REDIRECT_URL=https://digital.gov.bc.ca/digital-trust/projects-and-initiatives/conference-book-demo
+# CERTBOT_MANAGED_ROUTE=false
 TAG_NAME=dev
 # MIN_REPLICAS=3
 # MAX_REPLICAS=6
