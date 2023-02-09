@@ -20,6 +20,14 @@
         redir {$ALT_HOST_REDIRECT_URL}{uri}
     }
 
+    @uptime_host {
+        header_regexp uptime-host X-Forwarded-Host {$UPTIME_HOST_REGEX}
+    }
+
+    handle @uptime_host {
+        redir {$UPTIME_HOST_REDIRECT_URL}
+    }
+
     handle {
         redir {$REDIRECT_URL}{uri}
     }

@@ -93,6 +93,11 @@ objects:
                 - name: ALT_HOST_REDIRECT_URL
                   value: ${ALT_HOST_REDIRECT_URL}
 
+                - name: UPTIME_HOST_REGEX
+                  value: ${UPTIME_HOST_REGEX}
+                - name: UPTIME_HOST_REDIRECT_URL
+                  value: ${UPTIME_HOST_REDIRECT_URL}
+
               resources:
                 requests:
                   cpu: ${CPU_REQUEST}
@@ -207,6 +212,110 @@ objects:
         haproxy.router.openshift.io/timeout: ${ROUTE_TIMEOUT}
     spec:
       host: ${ALT_HOST_NAME}
+      port:
+        targetPort: 8080-tcp
+      tls:
+        insecureEdgeTerminationPolicy: Redirect
+        termination: edge
+      to:
+        kind: Service
+        name: ${NAME}${SUFFIX}
+        weight: 100
+
+  - kind: Route
+    apiVersion: v1
+    metadata:
+      name: ${NAME}-uptime${SUFFIX}
+      labels:
+        name: ${NAME}-uptime${SUFFIX}
+        app: ${APP_NAME}${SUFFIX}
+        app.kubernetes.io/part-of: ${APP_NAME}${SUFFIX}
+        app-group: ${APP_GROUP}
+        role: ${ROLE}
+        env: ${TAG_NAME}
+        certbot-managed: ${CERTBOT_MANAGED_ROUTE}
+      annotations:
+        haproxy.router.openshift.io/timeout: ${ROUTE_TIMEOUT}
+    spec:
+      host: ${UPTIME_HOST_NAME}
+      port:
+        targetPort: 8080-tcp
+      tls:
+        insecureEdgeTerminationPolicy: Redirect
+        termination: edge
+      to:
+        kind: Service
+        name: ${NAME}${SUFFIX}
+        weight: 100
+
+  - kind: Route
+    apiVersion: v1
+    metadata:
+      name: ${NAME}-dev-uptime${SUFFIX}
+      labels:
+        name: ${NAME}-dev-uptime${SUFFIX}
+        app: ${APP_NAME}${SUFFIX}
+        app.kubernetes.io/part-of: ${APP_NAME}${SUFFIX}
+        app-group: ${APP_GROUP}
+        role: ${ROLE}
+        env: ${TAG_NAME}
+        certbot-managed: ${CERTBOT_MANAGED_ROUTE}
+      annotations:
+        haproxy.router.openshift.io/timeout: ${ROUTE_TIMEOUT}
+    spec:
+      host: ${DEV_UPTIME_HOST_NAME}
+      port:
+        targetPort: 8080-tcp
+      tls:
+        insecureEdgeTerminationPolicy: Redirect
+        termination: edge
+      to:
+        kind: Service
+        name: ${NAME}${SUFFIX}
+        weight: 100
+
+  - kind: Route
+    apiVersion: v1
+    metadata:
+      name: ${NAME}-test-uptime${SUFFIX}
+      labels:
+        name: ${NAME}-test-uptime${SUFFIX}
+        app: ${APP_NAME}${SUFFIX}
+        app.kubernetes.io/part-of: ${APP_NAME}${SUFFIX}
+        app-group: ${APP_GROUP}
+        role: ${ROLE}
+        env: ${TAG_NAME}
+        certbot-managed: ${CERTBOT_MANAGED_ROUTE}
+      annotations:
+        haproxy.router.openshift.io/timeout: ${ROUTE_TIMEOUT}
+    spec:
+      host: ${TEST_UPTIME_HOST_NAME}
+      port:
+        targetPort: 8080-tcp
+      tls:
+        insecureEdgeTerminationPolicy: Redirect
+        termination: edge
+      to:
+        kind: Service
+        name: ${NAME}${SUFFIX}
+        weight: 100
+
+  - kind: Route
+    apiVersion: v1
+    metadata:
+      name: ${NAME}-prod-uptime${SUFFIX}
+      labels:
+        name: ${NAME}-prod-uptime${SUFFIX}
+        app: ${APP_NAME}${SUFFIX}
+        app.kubernetes.io/part-of: ${APP_NAME}${SUFFIX}
+        app-group: ${APP_GROUP}
+        role: ${ROLE}
+        env: ${TAG_NAME}
+        certbot-managed: ${CERTBOT_MANAGED_ROUTE}
+      annotations:
+        haproxy.router.openshift.io/timeout: ${ROUTE_TIMEOUT}
+    spec:
+      host: ${PROD_UPTIME_HOST_NAME}
       port:
         targetPort: 8080-tcp
       tls:
@@ -337,6 +446,36 @@ parameters:
     displayName: Alternate Host Redirect URL
     description: The redirect URL for the alternate host name.
     value: https://digital.gov.bc.ca/digital-trust/projects-and-initiatives/conference-book-demo
+
+  # Uptime redirects
+  - name: UPTIME_HOST_REGEX
+    displayName: Uptime Host Regex
+    description: The Regex expression to use to match an uptime host URL
+    value: '.*uptime\.vonx\.io.*'
+  - name: UPTIME_HOST_REDIRECT_URL
+    displayName: Uptime Host Redirect URL
+    description: The URL to use when redirecting uptime host URLs
+    value: https://ditp.uptime.vonx.io
+  - name: UPTIME_HOST_NAME
+    displayName: Uptime Host Name
+    description: Uptime Host Name
+    value: uptime.vonx.io
+  - name: DEV_UPTIME_HOST_NAME
+    displayName: Dev Uptime Host Name
+    description: Dev Uptime Host Name
+    value: dev.uptime.vonx.io
+  - name: TEST_UPTIME_HOST_NAME
+    displayName: Test Uptime Host Name
+    description: Test Uptime Host Name
+    value: test.uptime.vonx.io
+  - name: TEST_UPTIME_HOST_NAME
+    displayName: Test Uptime Host Name
+    description: Test Uptime Host Name
+    value: test.uptime.vonx.io
+  - name: PROD_UPTIME_HOST_NAME
+    displayName: Prod Uptime Host Name
+    description: Prod Uptime Host Name
+    value: prod.uptime.vonx.io
 
   - name: CERTBOT_MANAGED_ROUTE
     displayName: Certbot Managed Route
